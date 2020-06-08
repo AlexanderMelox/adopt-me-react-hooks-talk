@@ -8,16 +8,15 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "axios": "^0.19.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "request-api-token": "curl -d \"grant_type=client_credentials&client_id=OmY7oSXgI5N7Z0HJE653qCycAfPP4eqwttDh3yT31sQZ3PKIu5&client_secret=XXy1wG2XM87vhfheAuVTJALI4fYUwqd5F7S9zBHR\" https://api.petfinder.com/v2/oauth2/token",
-    "eject": "react-scripts eject"
+    "request-api-token": "curl -d \"grant_type=client_credentials&client_id=OmY7oSXgI5N7Z0HJE653qCycAfPP4eqwttDh3yT31sQZ3PKIu5&client_secret=XXy1wG2XM87vhfheAuVTJALI4fYUwqd5F7S9zBHR\" https://api.petfinder.com/v2/oauth2/token"
   },
   "eslintConfig": {
     "extends": "react-app"

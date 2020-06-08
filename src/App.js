@@ -1,7 +1,7 @@
 import React from 'react';
-import { Switch, Route } from 'react-router-dom';
-import Home from './pages/Home';
-import { Container, Header } from './components/Elements';
+import { Container, Header, Grid } from './components/Elements';
+import Filter from './components/Filter';
+import Results from './components/Results';
 
 const App = () => {
   return (
@@ -15,14 +15,10 @@ const App = () => {
         </h1>
       </Header>
       <Container>
-        <Switch>
-          <Route exact path="/">
-            <Home />
-          </Route>
-          <Route exact path="/pet/:id">
-            <div>Details page</div>
-          </Route>
-        </Switch>
+        <Grid>
+          <Filter />
+          <Results />
+        </Grid>
       </Container>
     </>
   );

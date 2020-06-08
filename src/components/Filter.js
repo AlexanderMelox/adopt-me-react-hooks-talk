@@ -1,14 +1,49 @@
-import React, { useState } from 'react';
-import styled from '@emotion/styled';
+import React, { useState, useEffect } from 'react';
+import { Button, StyledFilter, Form, FormGroup, Input } from './Elements';
+
+import { fetchBreeds, fetchAnimals } from '../utils/helpers';
+import useDropdown from '../hooks/useDropdown';
+import useStore from '../hooks/useStore';
 
 const Filter = () => {
-  const [location, setLocation] = useState('');
-  const [animal, setAnimal] = useState('');
-  const [breed, setBreed] = useState('all');
+  const [, { setLoading, setPets }] = useStore();
 
+  // useState example
+  const [location, setLocation] = useState('Austin, TX');
+
+  const [animal, setAnimal, AnimalDropdown] = useDropdown('Animal', '', [
+    'dog',
+    'cat',
+  ]);
+  const [breeds, setBreeds] = useState([]);
+  const [breed, setBreed, BreedDropdown] = useDropdown('Breed', '', breeds);
+
+  // This will be shown in the first example for useState
   const onLocationChange = (event) => setLocation(event.target.value);
-  const onAnimalChange = (event) => setAnimal(event.target.value);
-  const onBreedChange = (event) => setBreed(event.target.value);
+
+  const reset = () => {
+    setBreed('');
+    setAnimal('');
+  };
+
+  const onSubmit = async (event) => {
+    event.preventDefault();
+    // Setup global state at this point
+    // show dispatch version then function way
+    setLoading(true);
+    const animals = await fetchAnimals({ location, animal, breed });
+    setPets(animals);
+    setLoading(false);
+    reset();
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      // If an animal was selected set the breeds
+      if (animal) setBreeds(await fetchBreeds(animal));
+    };
+    fetchData();
+  }, [animal, setBreeds]);
 
   return (
     <StyledFilter>
@@ -24,89 +59,14 @@ const Filter = () => {
             placeholder="City, ST"
           />
         </FormGroup>
-        <FormGroup>
-          <label>Animal:</label>
-          <Select value={animal} onChange={onAnimalChange}>
-            <option disabled value="">
-              Choose a type of animal
-            </option>
-            <option value="dog">dog</option>
-            <option value="cat">cat</option>
-          </Select>
-        </FormGroup>
-        <FormGroup>
-          <label>Breed:</label>
-          <Select disabled={!animal} value={animal} onChange={onBreedChange}>
-            <option value="all">all</option>
-            <option value="breed">breed</option>
-          </Select>
-        </FormGroup>
-        <Submit disabled={!location || !animal || !breed}>Submit</Submit>
+        <AnimalDropdown />
+        <BreedDropdown />
+        <Button onClick={onSubmit} disabled={!location || !animal || !breed}>
+          Submit
+        </Button>
       </Form>
     </StyledFilter>
   );
 };
-
-// Styled components
-const StyledFilter = styled.aside`
-  background-color: var(--honeydew);
-  padding: 1rem;
-  color: var(--text-inverted);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-`;
-
-const Form = styled.form``;
-
-const FormGroup = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: 1rem;
-
-  label {
-    flex: 0 0 30%;
-  }
-`;
-
-export const Input = styled.input`
-  font: inherit;
-  border: none;
-  outline: none;
-  border-radius: 0.5rem;
-  padding: 0.1rem 0.8rem;
-  border: 3px solid var(--powder-blue);
-  flex: 0 0 70%;
-`;
-
-export const Select = styled.select`
-  font: inherit;
-  border: none;
-  outline: none;
-  border-radius: 0.5rem;
-  padding: 0.1rem 0.8rem;
-  border: 3px solid var(--powder-blue);
-  flex: 0 0 70%;
-`;
-
-const Submit = styled.button`
-  display: block;
-  margin: 1rem auto;
-  border: none;
-  outline: none;
-  background-color: var(--imperial-red);
-  padding: 0.5rem 2rem;
-  box-shadow: var(--shadow-small);
-  color: var(--text);
-  font: inherit;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: 700;
-
-  :disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
-  }
-`;
 
 export default Filter;
