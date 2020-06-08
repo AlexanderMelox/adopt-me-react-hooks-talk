@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Button, StyledFilter, Form, FormGroup, Input } from './Elements';
 import { fetchBreeds, fetchAnimals } from '../utils/helpers';
 
