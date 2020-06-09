@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { FormGroup, Select } from '../components/Elements';
 
-const useDropdown = (label, initialValue, options) => {
+const useDropdown = (label, initialValue = '', options) => {
   const [value, setValue] = useState(initialValue);
 
-  const onChange = (event) => setValue(event.target.value);
+  const onChange = useCallback((event) => setValue(event.target.value), []);
 
   const Dropdown = () => (
     <FormGroup>

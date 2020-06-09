@@ -52,7 +52,7 @@ export const StyledFilter = styled.aside`
   color: var(--text-inverted);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  height: 324px;
+  height: 360px;
 `;
 
 export const Form = styled.form``;

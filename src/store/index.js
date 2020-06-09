@@ -1,10 +1,12 @@
 import React, { createContext, useReducer } from 'react';
 
+// Setup our initial global state
 const initialState = {
   loading: false,
   pets: [],
 };
 
+// a reducer to update the state
 function reducer(state, action) {
   switch (action.type) {
     case 'SET_LOADING':
@@ -16,8 +18,10 @@ function reducer(state, action) {
   }
 }
 
+// create out store context
 export const StoreContext = createContext();
 
+// Create the provider component to wrap the application
 const StoreProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 

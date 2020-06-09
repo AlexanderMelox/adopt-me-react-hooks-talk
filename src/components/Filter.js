@@ -1,53 +1,70 @@
-import React, { useState, useEffect } from 'react';
-import { Button, StyledFilter, Form, FormGroup, Input } from './Elements';
-
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  useCallback,
+  useMemo,
+} from 'react';
+import {
+  Button,
+  StyledFilter,
+  Form,
+  FormGroup,
+  Input,
+  Select,
+} from './Elements';
 import { fetchBreeds, fetchAnimals } from '../utils/helpers';
+
+import CallbackExample from './CallbackExample';
 import useDropdown from '../hooks/useDropdown';
 import useStore from '../hooks/useStore';
 
 const Filter = () => {
-  const [, { setLoading, setPets }] = useStore();
-
-  // useState example
-  const [location, setLocation] = useState('Austin, TX');
-
-  const [animal, setAnimal, AnimalDropdown] = useDropdown('Animal', '', [
-    'dog',
-    'cat',
-  ]);
+  const animalTypes = useMemo(() => ['dog', 'cat'], []);
+  const [state, { setLoading, setPets }] = useStore();
   const [breeds, setBreeds] = useState([]);
+
+  const [location, setLocation] = useState('Austin, TX');
+  const [animal, setAnimal, AnimalDropdown] = useDropdown(
+    'Animal',
+    '',
+    animalTypes
+  );
   const [breed, setBreed, BreedDropdown] = useDropdown('Breed', '', breeds);
 
-  // This will be shown in the first example for useState
-  const onLocationChange = (event) => setLocation(event.target.value);
-
-  const reset = () => {
-    setBreed('');
-    setAnimal('');
-  };
-
-  const onSubmit = async (event) => {
-    event.preventDefault();
-    // Setup global state at this point
-    // show dispatch version then function way
-    setLoading(true);
-    const animals = await fetchAnimals({ location, animal, breed });
-    setPets(animals);
-    setLoading(false);
-    reset();
-  };
+  const onLocationChange = useCallback((event) => {
+    setLocation(event.target.value);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
-      // If an animal was selected set the breeds
-      if (animal) setBreeds(await fetchBreeds(animal));
+      if (animal !== '') setBreeds(await fetchBreeds(animal));
     };
     fetchData();
-  }, [animal, setBreeds]);
+  }, [animal]);
+
+  const reset = useCallback(() => {
+    setBreed('');
+    setAnimal('');
+  }, [setBreed, setAnimal]);
+
+  const onSubmit = useCallback(
+    async (event) => {
+      event.preventDefault();
+      setLoading(true);
+      const animals = await fetchAnimals({ location, animal, breed });
+      setPets(animals);
+      setLoading(false);
+      reset();
+    },
+    [animal, breed, location, setLoading, setPets, reset]
+  );
 
   return (
     <StyledFilter>
       <h2>Filter</h2>
+      <CallbackExample someValue={animalTypes} />
+
       <Form>
         <FormGroup>
           <label htmlFor="location">Location:</label>
