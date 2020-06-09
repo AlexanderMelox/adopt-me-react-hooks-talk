@@ -3,10 +3,9 @@ import ReactDOM from 'react-dom';
 import { Global, css } from '@emotion/core';
 
 import App from './App';
-import StoreProvider from './store';
 
 ReactDOM.render(
-  <StoreProvider>
+  <>
     {/* Adds global styles to the app */}
     <Global
       styles={css`
@@ -52,6 +51,6 @@ ReactDOM.render(
       `}
     />
     <App />
-  </StoreProvider>,
+  </>,
   document.getElementById('root')
 );
