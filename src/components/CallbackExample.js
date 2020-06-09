@@ -13,4 +13,4 @@ const CallbackExample = ({ someValue }) => {
   );
 };
 
-export default CallbackExample;
+export default React.memo(CallbackExample);
