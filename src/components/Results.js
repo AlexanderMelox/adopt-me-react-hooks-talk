@@ -2,11 +2,9 @@ import React from 'react';
 import { Empty, Loading, StyledResults } from './Elements';
 import Card from './Card';
 
-import useStore from '../hooks/useStore';
-
 const Results = () => {
-  const [state] = useStore();
-  const { loading, pets } = state;
+  const loading = false;
+  const pets = [];
 
   let content;
   if (loading) {
